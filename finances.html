@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Finances — Washington High School Band</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #ffffff;
+      --card: #f9fafb;
+      --accent: #f97316;
+      --accent-dim: rgba(249,115,22,0.1);
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: rgba(15, 23, 42, 0.08);
+      --nav-h: 68px;
+      --font-heading: "Times New Roman", Times, Baskerville, Georgia, serif;
+      --font-body: "Times New Roman", Times, Georgia, serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    h1, h2, h3, .hero-title, .logo {
+      font-family: var(--font-heading);
+      font-weight: 800;
+    }
+    body { font-family: var(--font-body); background-color: var(--bg); color: var(--text); font-size: 16px; line-height: 1.6; overflow-x: hidden; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      background: rgba(10,10,12,0.72);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+      z-index: 1000;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%;
+    }
+    .nav-brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .nav-brand-icon { width: 38px; height: 38px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: var(--font-heading); font-weight: 800; font-size: 16px; color: #fff; flex-shrink: 0; }
+    .nav-brand-text { font-family: var(--font-heading); font-weight: 700; font-size: 15px; color: var(--text); line-height: 1.2; }
+    .nav-brand-text span { display: block; font-size: 11px; font-weight: 400; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+    .nav-links { display: flex; align-items: center; gap: 4px; list-style: none; }
+    .nav-links a { display: block; padding: 6px 14px; font-family: var(--font-body); font-size: 14px; font-weight: 500; color: var(--muted); text-decoration: none; border-radius: 6px; transition: color 0.2s, background 0.2s; }
+    .nav-links a:hover { color: var(--text); background: rgba(255,255,255,0.06); }
+    .nav-links a.active { color: var(--accent); }
+
+    /* PAGE HEADER */
+    .page-header {
+      padding-top: calc(var(--nav-h) + 80px);
+      padding-bottom: 80px;
+      padding-left: 5%; padding-right: 5%;
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .page-header::before {
+      content: '';
+      position: absolute;
+      top: -100px; right: -100px;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(249,115,22,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .page-header-inner { max-width: 1280px; margin: 0 auto; }
+    .page-breadcrumb { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+    .page-breadcrumb a { color: var(--muted); text-decoration: none; }
+    .page-breadcrumb a:hover { color: var(--accent); }
+    .page-title { font-family: var(--font-heading); font-size: clamp(36px, 5vw, 60px); font-weight: 800; letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 16px; }
+    .page-subtitle { font-size: 18px; color: var(--muted); max-width: 560px; line-height: 1.65; }
+
+    /* SECTION */
+    section { padding: 88px 5%; }
+    .section-inner { max-width: 1280px; margin: 0 auto; }
+    .section-label { font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+    .section-title { font-family: var(--font-heading); font-size: clamp(26px, 3.5vw, 38px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; color: var(--text); margin-bottom: 14px; }
+    .section-body { font-size: 16px; color: var(--muted); max-width: 640px; line-height: 1.75; }
+
+    /* DONATION SECTION */
+    .donate-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px; }
+    .donate-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 36px 28px;
+      display: flex; flex-direction: column;
+      transition: border-color 0.2s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .donate-card:hover { border-color: rgba(249,115,22,0.35); transform: translateY(-3px); }
+    .donate-card.featured { border-color: rgba(249,115,22,0.4); }
+    .donate-card.featured::before {
+      content: 'MOST POPULAR';
+      position: absolute; top: 0; right: 0;
+      background: var(--accent); color: #fff;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.14em;
+      padding: 5px 14px;
+      border-bottom-left-radius: 8px;
+    }
+    .donate-icon { font-size: 30px; margin-bottom: 18px; }
+    .donate-title { font-family: var(--font-heading); font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 10px; }
+    .donate-desc { font-size: 14px; color: var(--muted); line-height: 1.65; flex: 1; }
+    .donate-amount { font-family: var(--font-heading); font-size: 36px; font-weight: 800; color: var(--accent); margin: 20px 0 8px; }
+    .donate-amount span { font-size: 15px; font-weight: 400; color: var(--muted); }
+
+    .btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--accent); color: #fff; font-family: var(--font-body); font-size: 15px; font-weight: 600; padding: 13px 28px; border-radius: 8px; text-decoration: none; border: none; cursor: pointer; transition: background 0.2s, transform 0.15s; box-shadow: 0 4px 20px rgba(249,115,22,0.28); margin-top: 20px; width: 100%; justify-content: center; }
+    .btn-primary:hover { background: #ea6a00; transform: translateY(-1px); }
+    .btn-secondary { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: var(--text); font-family: var(--font-body); font-size: 15px; font-weight: 500; padding: 13px 28px; border-radius: 8px; text-decoration: none; border: 1px solid var(--border); cursor: pointer; transition: background 0.2s, border-color 0.2s; margin-top: 20px; width: 100%; justify-content: center; }
+    .btn-secondary:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.18); }
+
+    /* IMPACT STRIP */
+    .impact-strip {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 56px 5%;
+    }
+    .impact-strip-inner { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; gap: 48px; flex-wrap: wrap; }
+    .impact-strip-text { flex: 1; min-width: 260px; }
+    .impact-strip-text h3 { font-family: var(--font-heading); font-size: 26px; font-weight: 700; margin-bottom: 8px; }
+    .impact-strip-text p { color: var(--muted); font-size: 15px; max-width: 440px; }
+    .impact-numbers { display: flex; gap: 40px; flex-wrap: wrap; }
+    .impact-num { text-align: center; }
+    .impact-num strong { display: block; font-family: var(--font-heading); font-size: 38px; font-weight: 800; color: var(--accent); letter-spacing: -0.02em; }
+    .impact-num span { font-size: 13px; color: var(--muted); }
+
+    /* MERCH */
+    .merch-section { background: var(--bg); }
+    .merch-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 48px; }
+    .merch-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; transition: border-color 0.2s, transform 0.2s; cursor: pointer; }
+    .merch-card:hover { border-color: rgba(249,115,22,0.35); transform: translateY(-3px); }
+    .merch-img-wrap { position: relative; aspect-ratio: 1; overflow: hidden; }
+    .merch-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s; }
+    .merch-card:hover .merch-img-wrap img { transform: scale(1.06); }
+    .merch-badge { position: absolute; top: 10px; left: 10px; background: var(--accent); color: #fff; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 10px; border-radius: 4px; }
+    .merch-info { padding: 18px; }
+    .merch-name { font-family: var(--font-heading); font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .merch-sub { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+    .merch-price-row { display: flex; align-items: center; justify-content: space-between; }
+    .merch-price { font-family: var(--font-heading); font-size: 20px; font-weight: 700; color: var(--accent); }
+    .merch-view-btn { font-size: 13px; font-weight: 600; color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(249,115,22,0.4); padding-bottom: 1px; }
+    .merch-view-btn:hover { border-color: var(--accent); }
+
+    .merch-note { max-width: 1280px; margin: 28px auto 0; padding: 20px 24px; background: var(--card); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; font-size: 14px; color: var(--muted); line-height: 1.65; }
+
+    /* FOOTER */
+    footer { background: var(--card); border-top: 1px solid var(--border); padding: 60px 5% 36px; }
+    .footer-inner { max-width: 1280px; margin: 0 auto; }
+    .footer-top { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+    .footer-brand p { font-size: 14px; color: var(--muted); line-height: 1.65; margin-top: 14px; max-width: 260px; }
+    .footer-col h4 { font-family: var(--font-heading); font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text); margin-bottom: 16px; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-col ul a { font-size: 14px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .footer-col ul a:hover { color: var(--text); }
+    .footer-bottom { border-top: 1px solid var(--border); padding-top: 28px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--muted); flex-wrap: wrap; gap: 12px; }
+    .footer-bottom a { color: var(--muted); text-decoration: none; }
+    .footer-bottom a:hover { color: var(--accent); }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-brand">
+      <div class="nav-brand-icon">WHS</div>
+      <div class="nav-brand-text">Washington Huskies <span>Marching Band</span></div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="finances.html" class="active">Finances</a></li>
+      <li><a href="media.html">Media</a></li>
+      <li><a href="logistics.html">Logistics</a></li>
+      <li><a href="support-materials.html">Support</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-header">
+    <div class="page-header-inner">
+      <div class="page-breadcrumb"><a href="index.html">Home</a> / Finances</div>
+      <h1 class="page-title">Finances &amp;<br/>Merchandise</h1>
+      <p class="page-subtitle">Invest in musical excellence. Every dollar directly supports student travel, instruments, and competition fees.</p>
+    </div>
+  </div>
+
+  <!-- DONATION HUB -->
+  <section>
+    <div class="section-inner">
+      <div class="section-label">Donate</div>
+      <h2 class="section-title">Support the Huskies</h2>
+      <p class="section-body">Your contribution — at any level — funds competition travel, instrument maintenance, new equipment, and student scholarships. All donations are tax-deductible through the WHS Booster Club 501(c)(3).</p>
+
+      <div class="donate-grid">
+        <div class="donate-card">
+          <div class="donate-icon">🎵</div>
+          <div class="donate-title">Individual Supporter</div>
+          <p class="donate-desc">Support a student musician directly. Your gift covers essentials like reeds, mouthpieces, and sheet music for one member's season.</p>
+          <div class="donate-amount">$50 <span>/ suggested</span></div>
+          <a href="https://donorbox.org" target="_blank" class="btn-secondary">Donate via DonorBox ↗</a>
+        </div>
+        <div class="donate-card featured">
+          <div class="donate-icon">🏆</div>
+          <div class="donate-title">Competition Sponsor</div>
+          <p class="donate-desc">Help fund one competition event — including transportation, entry fees, and equipment truck rental for our full 140-person ensemble.</p>
+          <div class="donate-amount">$500 <span>/ event</span></div>
+          <a href="https://donorbox.org" target="_blank" class="btn-primary">Donate via DonorBox ↗</a>
+        </div>
+        <div class="donate-card">
+          <div class="donate-icon">🎓</div>
+          <div class="donate-title">Annual Scholarship Fund</div>
+          <p class="donate-desc">Contribute to the Husky Merit Scholarship, awarded annually to graduating seniors pursuing music or arts programs at the college level.</p>
+          <div class="donate-amount">$250 <span>/ year</span></div>
+          <a href="https://paypal.com/donate" target="_blank" class="btn-secondary">Donate via PayPal ↗</a>
+        </div>
+      </div>
+
+      <div style="max-width:1280px; margin: 36px auto 0; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 28px; display: flex; gap: 20px; align-items: flex-start;">
+          <div style="font-size:26px; flex-shrink:0;">🏢</div>
+          <div>
+            <div style="font-family:var(--font-heading); font-size: 17px; font-weight: 700; margin-bottom: 8px;">Corporate Sponsorship Packages</div>
+            <p style="font-size: 14px; color: var(--muted); line-height: 1.65;">Businesses can sponsor the WHS Band at Gold, Silver, or Community tiers. Includes logo placement on uniforms, banners, and the program website. Contact the Booster Club for a full prospectus.</p>
+            <a href="mailto:boosters@washingtonhigh.edu" style="display:inline-block; margin-top: 14px; font-size: 14px; font-weight: 600; color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(249,115,22,0.4);">Email Booster Club ↗</a>
+          </div>
+        </div>
+        <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 28px; display: flex; gap: 20px; align-items: flex-start;">
+          <div style="font-size:26px; flex-shrink:0;">🎗️</div>
+          <div>
+            <div style="font-family:var(--font-heading); font-size: 17px; font-weight: 700; margin-bottom: 8px;">Alumni &amp; Legacy Giving</div>
+            <p style="font-size: 14px; color: var(--muted); line-height: 1.65;">Former Huskies can contribute to the Legacy Fund, which ensures instruments are maintained and accessible to students who cannot afford their own. Your legacy, continued.</p>
+            <a href="https://venmo.com" target="_blank" style="display:inline-block; margin-top: 14px; font-size: 14px; font-weight: 600; color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(249,115,22,0.4);">Give via Venmo ↗</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- IMPACT STRIP -->
+  <div class="impact-strip">
+    <div class="impact-strip-inner">
+      <div class="impact-strip-text">
+        <h3>Where Your Dollars Go</h3>
+        <p>100% of proceeds from donations and merchandise sales go directly to student programming, travel, and equipment — none to overhead.</p>
+      </div>
+      <div class="impact-numbers">
+        <div class="impact-num"><strong>$48K</strong><span>Raised in 2025</span></div>
+        <div class="impact-num"><strong>92%</strong><span>To Students</span></div>
+        <div class="impact-num"><strong>140</strong><span>Students Supported</span></div>
+        <div class="impact-num"><strong>12</strong><span>Events Funded</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MERCH -->
+  <section class="merch-section">
+    <div class="section-inner">
+      <div class="section-label">Band Store</div>
+      <h2 class="section-title">Official Merchandise</h2>
+      <p class="section-body">Rep the Huskies. All items are screen-printed in our school colors and manufactured by our official partner, Northeast Printing Group.</p>
+
+      <div class="merch-grid">
+        <div class="merch-card">
+          <div class="merch-img-wrap">
+            <img src="https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=600&q=75" alt="Hoodie" />
+            <div class="merch-badge">Best Seller</div>
+          </div>
+          <div class="merch-info">
+            <div class="merch-name">Husky Pullover Hoodie</div>
+            <div class="merch-sub">S / M / L / XL / 2XL</div>
+            <div class="merch-price-row">
+              <div class="merch-price">$42</div>
+              <a href="#" class="merch-view-btn">View Item →</a>
+            </div>
+          </div>
+        </div>
+        <div class="merch-card">
+          <div class="merch-img-wrap">
+            <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&q=75" alt="T-Shirt" />
+          </div>
+          <div class="merch-info">
+            <div class="merch-name">Classic Band Tee</div>
+            <div class="merch-sub">Short sleeve · Unisex</div>
+            <div class="merch-price-row">
+              <div class="merch-price">$22</div>
+              <a href="#" class="merch-view-btn">View Item →</a>
+            </div>
+          </div>
+        </div>
+        <div class="merch-card">
+          <div class="merch-img-wrap">
+            <img src="https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=600&q=75" alt="Snap Cap" />
+            <div class="merch-badge">New</div>
+          </div>
+          <div class="merch-info">
+            <div class="merch-name">Huskies Snap-Back Cap</div>
+            <div class="merch-sub">One size · Adjustable</div>
+            <div class="merch-price-row">
+              <div class="merch-price">$28</div>
+              <a href="#" class="merch-view-btn">View Item →</a>
+            </div>
+          </div>
+        </div>
+        <div class="merch-card">
+          <div class="merch-img-wrap">
+            <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&q=75" alt="Tote bag" />
+          </div>
+          <div class="merch-info">
+            <div class="merch-name">Rehearsal Tote Bag</div>
+            <div class="merch-sub">Heavy canvas · 18 L</div>
+            <div class="merch-price-row">
+              <div class="merch-price">$18</div>
+              <a href="#" class="merch-view-btn">View Item →</a>
+            </div>
+          </div>
+        </div>
+        <div class="merch-card">
+          <div class="merch-img-wrap">
+            <img src="https://images.unsplash.com/photo-1625895197185-efcec01cffe0?w=600&q=75" alt="Long sleeve" />
+          </div>
+          <div class="merch-info">
+            <div class="merch-name">Husky Long-Sleeve Tee</div>
+            <div class="merch-sub">Performance moisture-wicking</div>
+            <div class="merch-price-row">
+              <div class="merch-price">$30</div>
+              <a href="#" class="merch-view-btn">View Item →</a>
+            </div>
+          </div>
+        </div>
+        <div class="merch-card">
+          <div class="merch-img-wrap">
+            <img src="https://images.unsplash.com/photo-1607345366928-199ea26cfe3e?w=600&q=75" alt="Jacket" />
+            <div class="merch-badge">Limited</div>
+          </div>
+          <div class="merch-info">
+            <div class="merch-name">Staff Zip-Up Jacket</div>
+            <div class="merch-sub">Director &amp; Staff edition</div>
+            <div class="merch-price-row">
+              <div class="merch-price">$65</div>
+              <a href="#" class="merch-view-btn">View Item →</a>
+            </div>
+          </div>
+        </div>
+        <div class="merch-card">
+          <div class="merch-img-wrap">
+            <img src="https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=600&q=75" alt="Water bottle" />
+          </div>
+          <div class="merch-info">
+            <div class="merch-name">Insulated Water Bottle</div>
+            <div class="merch-sub">24 oz · Husky logo</div>
+            <div class="merch-price-row">
+              <div class="merch-price">$20</div>
+              <a href="#" class="merch-view-btn">View Item →</a>
+            </div>
+          </div>
+        </div>
+        <div class="merch-card">
+          <div class="merch-img-wrap">
+            <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?w=600&q=75" alt="Sticker pack" />
+          </div>
+          <div class="merch-info">
+            <div class="merch-name">Husky Sticker Pack</div>
+            <div class="merch-sub">6-piece set · Waterproof vinyl</div>
+            <div class="merch-price-row">
+              <div class="merch-price">$9</div>
+              <a href="#" class="merch-view-btn">View Item →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="merch-note">
+        📦 <strong style="color:var(--text);">Order Process:</strong> All merchandise orders are placed through the Booster Club store. Orders are collected twice per month and distributed at the next scheduled rehearsal. For bulk orders or questions, contact <a href="mailto:store@washingtonhigh.edu" style="color:var(--accent);">store@washingtonhigh.edu</a>. Items cannot be shipped — pick-up only.
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="nav-brand-icon">WHS</div>
+            <span style="font-family:var(--font-heading);font-weight:700;font-size:16px;">Washington Huskies</span>
+          </div>
+          <p>Building musicians, leaders, and community since 1891.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Pages</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="finances.html">Finances</a></li>
+            <li><a href="media.html">Media</a></li>
+            <li><a href="logistics.html">Logistics</a></li>
+            <li><a href="support-materials.html">Support</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Donate</h4>
+          <ul>
+            <li><a href="https://donorbox.org" target="_blank">DonorBox</a></li>
+            <li><a href="https://paypal.com/donate" target="_blank">PayPal</a></li>
+            <li><a href="https://venmo.com" target="_blank">Venmo</a></li>
+            <li><a href="mailto:boosters@washingtonhigh.edu">Booster Club Email</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Connect</h4>
+          <ul>
+            <li><a href="mailto:j.holloway@washingtonhigh.edu">Email Director</a></li>
+            <li><a href="#">Facebook Group</a></li>
+            <li><a href="#">YouTube Channel</a></li>
+            <li><a href="#">Band App</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Washington High School Band Booster Club. All rights reserved.</span>
+        <span>Site maintained by the <a href="#">WHS Band Booster Club</a></span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

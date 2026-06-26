@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Logistics — Washington High School Band</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #ffffff;
+      --card: #f9fafb;
+      --accent: #f97316;
+      --accent-dim: rgba(249,115,22,0.1);
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: rgba(15, 23, 42, 0.08);
+      --nav-h: 68px;
+      --font-heading: "Times New Roman", Times, Baskerville, Georgia, serif;
+      --font-body: "Times New Roman", Times, Georgia, serif;
+    }
+    html { scroll-behavior: smooth; }
+
+    h1, h2, h3, .hero-title, .logo {
+      font-family: var(--font-heading);
+      font-weight: 800;
+    }
+    body { font-family: var(--font-body); background-color: var(--bg); color: var(--text); font-size: 16px; line-height: 1.6; overflow-x: hidden; }
+
+    nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); background: rgba(10,10,12,0.72); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; justify-content: space-between; padding: 0 5%; }
+    .nav-brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .nav-brand-icon { width: 38px; height: 38px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: var(--font-heading); font-weight: 800; font-size: 16px; color: #fff; flex-shrink: 0; }
+    .nav-brand-text { font-family: var(--font-heading); font-weight: 700; font-size: 15px; color: var(--text); line-height: 1.2; }
+    .nav-brand-text span { display: block; font-size: 11px; font-weight: 400; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+    .nav-links { display: flex; align-items: center; gap: 4px; list-style: none; }
+    .nav-links a { display: block; padding: 6px 14px; font-family: var(--font-body); font-size: 14px; font-weight: 500; color: var(--muted); text-decoration: none; border-radius: 6px; transition: color 0.2s, background 0.2s; }
+    .nav-links a:hover { color: var(--text); background: rgba(255,255,255,0.06); }
+    .nav-links a.active { color: var(--accent); }
+
+    .page-header { padding-top: calc(var(--nav-h) + 80px); padding-bottom: 80px; padding-left: 5%; padding-right: 5%; background: var(--card); border-bottom: 1px solid var(--border); position: relative; overflow: hidden; }
+    .page-header::before { content: ''; position: absolute; top: -100px; right: -100px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(249,115,22,0.08) 0%, transparent 70%); pointer-events: none; }
+    .page-header-inner { max-width: 1280px; margin: 0 auto; }
+    .page-breadcrumb { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+    .page-breadcrumb a { color: var(--muted); text-decoration: none; }
+    .page-title { font-family: var(--font-heading); font-size: clamp(36px, 5vw, 60px); font-weight: 800; letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 16px; }
+    .page-subtitle { font-size: 18px; color: var(--muted); max-width: 560px; line-height: 1.65; }
+
+    section { padding: 88px 5%; }
+    .section-inner { max-width: 1280px; margin: 0 auto; }
+    .section-label { font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+    .section-title { font-family: var(--font-heading); font-size: clamp(26px, 3.5vw, 38px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; color: var(--text); margin-bottom: 14px; }
+    .section-body { font-size: 16px; color: var(--muted); max-width: 640px; line-height: 1.75; }
+
+    /* VOLUNTEER */
+    .vol-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 48px; }
+    .vol-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 32px; transition: border-color 0.2s; }
+    .vol-card:hover { border-color: rgba(249,115,22,0.35); }
+    .vol-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 16px; }
+    .vol-card-icon { font-size: 28px; }
+    .vol-status { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 4px 10px; border-radius: 100px; }
+    .status-open { background: rgba(34,197,94,0.12); color: #16a34a; }
+    .status-filled { background: rgba(148,163,184,0.1); color: var(--muted); }
+    .status-needed { background: rgba(249,115,22,0.12); color: var(--accent); }
+    .vol-title { font-family: var(--font-heading); font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 10px; }
+    .vol-desc { font-size: 14px; color: var(--muted); line-height: 1.65; margin-bottom: 18px; }
+    .vol-detail-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
+    .vol-detail { font-size: 12px; color: var(--muted); background: var(--bg); padding: 4px 10px; border-radius: 6px; border: 1px solid var(--border); }
+    .btn-sm { display: inline-flex; align-items: center; gap: 6px; background: var(--accent-dim); color: var(--accent); font-family: var(--font-body); font-size: 13px; font-weight: 600; padding: 8px 16px; border-radius: 6px; text-decoration: none; border: 1px solid rgba(249,115,22,0.3); cursor: pointer; transition: background 0.2s; }
+    .btn-sm:hover { background: rgba(249,115,22,0.25); }
+    .btn-sm-muted { background: rgba(15, 23, 42, 0.04); color: var(--muted); border-color: var(--border); }
+    .btn-sm-muted:hover { background: rgba(15, 23, 42, 0.08); }
+
+    .vol-cta { margin-top: 40px; background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 36px; display: flex; align-items: center; justify-content: space-between; gap: 28px; flex-wrap: wrap; }
+    .vol-cta h3 { font-family: var(--font-heading); font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+    .vol-cta p { font-size: 14px; color: var(--muted); max-width: 520px; }
+    .btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--accent); color: #fff; font-family: var(--font-body); font-size: 15px; font-weight: 600; padding: 13px 28px; border-radius: 8px; text-decoration: none; border: none; cursor: pointer; transition: background 0.2s, transform 0.15s; box-shadow: 0 4px 20px rgba(249,115,22,0.28); flex-shrink: 0; }
+    .btn-primary:hover { background: #ea6a00; transform: translateY(-1px); }
+
+    /* CHAPERONE */
+    .chap-section { background: var(--card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .chap-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 48px; }
+    .chap-block { }
+    .chap-block h3 { font-family: var(--font-heading); font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+    .rule-list { display: flex; flex-direction: column; gap: 12px; }
+    .rule-item { display: flex; gap: 14px; align-items: flex-start; }
+    .rule-num { width: 26px; height: 26px; background: var(--accent-dim); border: 1px solid rgba(249,115,22,0.25); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-family: var(--font-heading); font-size: 12px; font-weight: 700; color: var(--accent); flex-shrink: 0; margin-top: 1px; }
+    .rule-text { font-size: 14px; color: var(--muted); line-height: 1.6; }
+    .rule-text strong { color: var(--text); }
+
+    /* ITINERARY */
+    .itinerary-line { position: relative; margin-top: 48px; }
+    .itinerary-line::before { content: ''; position: absolute; left: 19px; top: 0; bottom: 0; width: 1px; background: var(--border); }
+    .itinerary-item { display: flex; gap: 24px; position: relative; padding-bottom: 32px; }
+    .itinerary-item:last-child { padding-bottom: 0; }
+    .itinerary-dot { width: 40px; height: 40px; background: var(--card); border: 2px solid var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; z-index: 1; }
+    .itinerary-dot.accent { border-color: var(--accent); background: var(--accent-dim); }
+    .itinerary-body { padding-top: 6px; }
+    .itinerary-time { font-family: var(--font-heading); font-size: 13px; font-weight: 700; color: var(--accent); letter-spacing: 0.05em; margin-bottom: 4px; }
+    .itinerary-title { font-family: var(--font-heading); font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .itinerary-detail { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+    /* CALENDAR */
+    .cal-section { }
+    .cal-wrap { max-width: 1280px; margin: 48px auto 0; display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; align-items: start; }
+    .cal-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+    .cal-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .cal-month { font-family: var(--font-heading); font-size: 18px; font-weight: 700; }
+    .cal-nav { display: flex; gap: 8px; }
+    .cal-nav button { width: 32px; height: 32px; border-radius: 6px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; font-size: 14px; transition: background 0.2s, color 0.2s; }
+    .cal-nav button:hover { background: rgba(15, 23, 42, 0.06); color: var(--text); }
+    .cal-grid-wrap { padding: 20px; }
+    .cal-days-header { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 6px; }
+    .cal-day-label { text-align: center; font-size: 11px; font-weight: 600; color: var(--muted); letter-spacing: 0.08em; padding: 4px 0; }
+    .cal-days-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+    .cal-day { height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; color: var(--muted); cursor: pointer; transition: background 0.15s, color 0.15s; position: relative; }
+    .cal-day:hover { background: rgba(15, 23, 42, 0.06); color: var(--text); }
+    .cal-day.today { background: var(--accent); color: #fff; font-weight: 700; }
+    .cal-day.has-event { color: var(--text); }
+    .cal-day.has-event::after { content: ''; position: absolute; bottom: 5px; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
+    .cal-day.today::after { display: none; }
+    .cal-day.other-month { opacity: 0.3; }
+    .event-list-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; }
+    .event-list-header { padding: 20px 24px; border-bottom: 1px solid var(--border); font-family: var(--font-heading); font-size: 16px; font-weight: 700; }
+    .event-list { display: flex; flex-direction: column; }
+    .event-item { padding: 16px 24px; border-bottom: 1px solid var(--border); display: flex; gap: 16px; align-items: flex-start; transition: background 0.15s; }
+    .event-item:last-child { border-bottom: none; }
+    .event-item:hover { background: rgba(15, 23, 42, 0.03); }
+    .event-date-badge { width: 44px; text-align: center; flex-shrink: 0; }
+    .event-date-badge .month { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); }
+    .event-date-badge .day { font-family: var(--font-heading); font-size: 22px; font-weight: 800; color: var(--text); line-height: 1; }
+    .event-info { }
+    .event-name { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+    .event-meta { font-size: 12px; color: var(--muted); }
+    .event-type { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 7px; border-radius: 4px; display: inline-block; margin-top: 4px; }
+    .type-comp { background: rgba(249,115,22,0.12); color: var(--accent); }
+    .type-rehearsal { background: rgba(96,165,250,0.1); color: #60a5fa; }
+    .type-concert { background: rgba(167,139,250,0.1); color: #a78bfa; }
+    .type-game { background: rgba(52,211,153,0.1); color: #34d399; }
+
+    /* FOOTER */
+    footer { background: var(--card); border-top: 1px solid var(--border); padding: 60px 5% 36px; }
+    .footer-inner { max-width: 1280px; margin: 0 auto; }
+    .footer-top { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+    .footer-brand p { font-size: 14px; color: var(--muted); line-height: 1.65; margin-top: 14px; max-width: 260px; }
+    .footer-col h4 { font-family: var(--font-heading); font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text); margin-bottom: 16px; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-col ul a { font-size: 14px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .footer-col ul a:hover { color: var(--text); }
+    .footer-bottom { border-top: 1px solid var(--border); padding-top: 28px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--muted); flex-wrap: wrap; gap: 12px; }
+    .footer-bottom a { color: var(--muted); text-decoration: none; }
+    .footer-bottom a:hover { color: var(--accent); }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-brand">
+      <div class="nav-brand-icon">WHS</div>
+      <div class="nav-brand-text">Washington Huskies <span>Marching Band</span></div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="finances.html">Finances</a></li>
+      <li><a href="media.html">Media</a></li>
+      <li><a href="logistics.html" class="active">Logistics</a></li>
+      <li><a href="support-materials.html">Support</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-header">
+    <div class="page-header-inner">
+      <div class="page-breadcrumb"><a href="index.html">Home</a> / Logistics</div>
+      <h1 class="page-title">Logistics &amp;<br/>Operations</h1>
+      <p class="page-subtitle" style="margin-bottom: 1.5rem;">Volunteers, chaperones, event itineraries, and the full 2025–26 competition calendar — everything you need to show up prepared.</p>
+    </div>
+  </div>
+  
+  <div class="calendar-container" id="calendar" style="max-width: 100%; margin: 0.5rem auto 3rem auto; padding: 0 1rem;">
+    <iframe 
+        src="https://calendar.google.com/calendar/embed?src=5490aa9c55807dabe6c24ab3972632389e2bf9c6897ea3be2afc813c3d3e8870%40group.calendar.google.com&ctz=America%2FLos_Angeles&bgcolor=%23ffffff&showTitle=0&showNav=1&showDate=1&showPrint=0&showTabs=1&showCalendars=0&showTz=0" 
+        style="border: 1px solid rgba(15, 23, 42, 0.08); border-radius: 6px; background-color: #ffffff;" 
+        width="100%" 
+        height="600" 
+        frameborder="0" 
+        scrolling="no">
+    </iframe>
+  </div>
+</div>
+  <!-- VOLUNTEER SECTION -->
+  <section id="volunteer">
+    <div class="section-inner">
+      <div class="section-label">Get Involved</div>
+      <h2 class="section-title">Volunteer Opportunities</h2>
+      <p class="section-body">Our band runs on parent and community volunteers. Whether you can give one hour or every weekend, there's a role for you.</p>
+
+      <div class="vol-grid">
+        <div class="vol-card">
+          <div class="vol-card-top">
+            <div class="vol-card-icon">🚌</div>
+            <span class="vol-status status-needed">Urgent Need</span>
+          </div>
+          <div class="vol-title">Transportation Coordinator</div>
+          <p class="vol-desc">Organize charter bus bookings, create seat manifests, coordinate loading times, and confirm driver arrival at each event. Works closely with the Band Director.</p>
+          <div class="vol-detail-row">
+            <div class="vol-detail">📅 Competition Days</div>
+            <div class="vol-detail">⏱ 4–6 hrs/event</div>
+            <div class="vol-detail">👤 1 role open</div>
+          </div>
+          <a href="mailto:boosters@washingtonhigh.edu" class="btn-sm">Sign Up →</a>
+        </div>
+        <div class="vol-card">
+          <div class="vol-card-top">
+            <div class="vol-card-icon">🍕</div>
+            <span class="vol-status status-open">Open</span>
+          </div>
+          <div class="vol-title">Pit Crew &amp; Equipment Crew</div>
+          <p class="vol-desc">Load and unload instrument trucks, move pit percussion into position, and handle post-show equipment breakdown and transport back to school.</p>
+          <div class="vol-detail-row">
+            <div class="vol-detail">📅 Every Competition</div>
+            <div class="vol-detail">⏱ 3–4 hrs/event</div>
+            <div class="vol-detail">👤 6 roles open</div>
+          </div>
+          <a href="mailto:boosters@washingtonhigh.edu" class="btn-sm">Sign Up →</a>
+        </div>
+        <div class="vol-card">
+          <div class="vol-card-top">
+            <div class="vol-card-icon">🍱</div>
+            <span class="vol-status status-open">Open</span>
+          </div>
+          <div class="vol-title">Meal &amp; Concessions Volunteer</div>
+          <p class="vol-desc">Prepare or procure team meals before and after competitions. Manage concession donations, snack bags, and hydration stations for students at warm-up areas.</p>
+          <div class="vol-detail-row">
+            <div class="vol-detail">📅 Game Nights + Comps</div>
+            <div class="vol-detail">⏱ 2–3 hrs/event</div>
+            <div class="vol-detail">👤 4 roles open</div>
+          </div>
+          <a href="mailto:boosters@washingtonhigh.edu" class="btn-sm">Sign Up →</a>
+        </div>
+        <div class="vol-card">
+          <div class="vol-card-top">
+            <div class="vol-card-icon">📸</div>
+            <span class="vol-status status-open">Open</span>
+          </div>
+          <div class="vol-title">Official Media Volunteer</div>
+          <p class="vol-desc">Photograph and/or video-record performances. Footage will be used for this website, social media, and year-end highlight archives. Photography experience preferred.</p>
+          <div class="vol-detail-row">
+            <div class="vol-detail">📅 Flexible</div>
+            <div class="vol-detail">⏱ Varies</div>
+            <div class="vol-detail">👤 2 roles open</div>
+          </div>
+          <a href="mailto:boosters@washingtonhigh.edu" class="btn-sm">Sign Up →</a>
+        </div>
+        <div class="vol-card">
+          <div class="vol-card-top">
+            <div class="vol-card-icon">🧵</div>
+            <span class="vol-status status-filled">Filled</span>
+          </div>
+          <div class="vol-title">Uniform &amp; Costume Crew</div>
+          <p class="vol-desc">Assist students with uniform fitting, on-site alterations, and post-show uniform collection and care. Sewing and garment experience is a plus.</p>
+          <div class="vol-detail-row">
+            <div class="vol-detail">📅 Competition Days</div>
+            <div class="vol-detail">⏱ 5–7 hrs/event</div>
+            <div class="vol-detail">👤 Position filled</div>
+          </div>
+          <span class="btn-sm btn-sm-muted" style="cursor:not-allowed;">Currently Filled</span>
+        </div>
+        
+          
+          
+        </div>
+      </div>
+
+      <div class="vol-cta">
+        <div>
+          <h3>Ready to Help?</h3>
+          <p>Sign up through Sign Up Genius or email our Vice President of Family and Community Outreach directly. New volunteer orientations are held at the first Booster Club meeting of each month. Background checks required for all chaperones.</p>
+        </div>
+        <a href="mailto:nikmur706@fusdk12.net" class="btn-primary">Contact Outreach Lead →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAPERONE GUIDELINES -->
+  <section class="chap-section" id="chaperones">
+    <div class="section-inner">
+      <div class="section-label">Travel Safety</div>
+      <h2 class="section-title">Chaperone Guidelines</h2>
+      <p class="section-body">All chaperones must read and acknowledge these guidelines before participating in any away event. Questions can be directed to Dr. Edwards.</p>
+
+      <div class="chap-grid">
+        <div class="chap-block">
+          <h3>📋 General Conduct Rules</h3>
+          <div class="rule-list">
+            <div class="rule-item">
+              <div class="rule-num">1</div>
+              <div class="rule-text"><strong>Background Check Required:</strong> All chaperones must complete a Washington DC Public Schools background screening before the first event. Processing takes 5–10 business days.</div>
+            </div>
+            <div class="rule-item">
+              <div class="rule-num">2</div>
+              <div class="rule-text"><strong>Student Supervision Ratio:</strong> Maintain no less than a 1:8 adult-to-student ratio at all times during travel, hotel stays, and non-performance periods.</div>
+            </div>
+            <div class="rule-item">
+              <div class="rule-num">3</div>
+              <div class="rule-text"><strong>No Personal Devices During Show:</strong> Chaperones should not be on personal phones while actively supervising students in warm-up, performance, or transition areas.</div>
+            </div>
+            <div class="rule-item">
+              <div class="rule-num">4</div>
+              <div class="rule-text"><strong>Alcohol &amp; Substance Policy:</strong> Zero tolerance. No consumption of alcohol or substances during any band-related event from departure to return.</div>
+            </div>
+            <div class="rule-item">
+              <div class="rule-num">5</div>
+              <div class="rule-text"><strong>Medical Emergencies:</strong> All chaperones must review student medical alert files distributed by the director before each event. Carry the emergency contact binder.</div>
+            </div>
+            <div class="rule-item">
+              <div class="rule-num">6</div>
+              <div class="rule-text"><strong>Communication:</strong> Chaperones must have the Band App installed and notifications enabled. The primary director will use the app's broadcast feature for updates.</div>
+            </div>
+          </div>
+        </div>
+        <div class="chap-block">
+          <h3>✈️ Overnight Travel Policy</h3>
+          <div class="rule-list">
+            <div class="rule-item">
+              <div class="rule-num">A</div>
+              <div class="rule-text"><strong>Room Assignments:</strong> Students are assigned roommates by the director. Chaperone rooms are adjacent to student floors. Room checks occur at 10:30 PM and lights out at 11:00 PM.</div>
+            </div>
+            <div class="rule-item">
+              <div class="rule-num">B</div>
+              <div class="rule-text"><strong>Cross-Gender Room Policy:</strong> Students may not enter rooms assigned to students of a different gender under any circumstances. Violations result in immediate parent notification and potential dismissal from the trip.</div>
+            </div>
+            <div class="rule-item">
+              <div class="rule-num">C</div>
+              <div class="rule-text"><strong>Meal Accountability:</strong> All students must eat as a group during designated meal windows. No student may leave the designated dining area without chaperone escort.</div>
+            </div>
+            <div class="rule-item">
+              <div class="rule-num">D</div>
+              <div class="rule-text"><strong>Free Time Supervision:</strong> Any free time at the event venue must be supervised. Students are not to leave venue grounds. A check-in buddy system is enforced at all times.</div>
+            </div>
+            <div class="rule-item">
+              <div class="rule-num">E</div>
+              <div class="rule-text"><strong>Social Media:</strong> Chaperones should not post identifiable photos of minors to social media without Booster Club pre-approval. Direct all media to the official media volunteer.</div>
+            </div>
+            <div class="rule-item">
+              <div class="rule-num">F</div>
+              <div class="rule-text"><strong>Incident Reporting:</strong> Any behavioral or safety incident must be documented on a Booster Club incident form and submitted to the director within 24 hours of the event.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ITINERARY -->
+  <section id="itinerary">
+    <div class="section-inner">
+      <div class="section-label">Competition Day</div>
+      <h2 class="section-title">Performance Day Itinerary</h2>
+      <p class="section-body">A standard timeline for a competitive marching band event. Exact times vary per competition and will be communicated via the Band App.</p>
+
+      <div class="itinerary-line">
+        <div class="itinerary-item">
+          <div class="itinerary-dot">🌅</div>
+          <div class="itinerary-body">
+            <div class="itinerary-time">6:00 AM — Call Time</div>
+            <div class="itinerary-title">All-Hands Arrival at WHS Band Room</div>
+            <div class="itinerary-detail">Students arrive in comfortable clothing. Directors take attendance. Equipment crew begins loading instrument and pit trucks. Instrument cases pre-staged the evening before.</div>
+          </div>
+        </div>
+        <div class="itinerary-item">
+          <div class="itinerary-dot accent">🚌</div>
+          <div class="itinerary-body">
+            <div class="itinerary-time">7:00 AM — Departure</div>
+            <div class="itinerary-title">Buses Depart WHS Parking Lot</div>
+            <div class="itinerary-detail">Charter buses depart in convoy. Uniform bags loaded in cargo hold. Students are briefed on competition rules, performance order, and arrival procedures by section leaders.</div>
+          </div>
+        </div>
+        <div class="itinerary-item">
+          <div class="itinerary-dot">🅿️</div>
+          <div class="itinerary-body">
+            <div class="itinerary-time">Arrival — Venue Check-In</div>
+            <div class="itinerary-title">Director Check-In &amp; Lot Assignment</div>
+            <div class="itinerary-detail">Director checks in at the competition table. Equipment truck is directed to the unloading zone. Students stay on buses until a holding area is assigned.</div>
+          </div>
+        </div>
+        <div class="itinerary-item">
+          <div class="itinerary-dot">🎽</div>
+          <div class="itinerary-body">
+            <div class="itinerary-time">T-minus 3 hrs — Uniform Up</div>
+            <div class="itinerary-title">Students Change into Full Uniform</div>
+            <div class="itinerary-detail">Uniform crew assists with shako placement, gauntlet fastening, and bib adjustment. Director inspects each section. Full uniform is worn from this point through awards.</div>
+          </div>
+        </div>
+        <div class="itinerary-item">
+          <div class="itinerary-dot accent">🎼</div>
+          <div class="itinerary-body">
+            <div class="itinerary-time">T-minus 90 min — Warm-Up Block</div>
+            <div class="itinerary-title">Warm-Up Area: Full Ensemble Preparation</div>
+            <div class="itinerary-detail">45-minute warm-up in the designated area. Brass warm-up, battery/front ensemble tuning, and full run-through at 75% visual energy. Chaperones secure the perimeter.</div>
+          </div>
+        </div>
+        <div class="itinerary-item">
+          <div class="itinerary-dot">🚶</div>
+          <div class="itinerary-body">
+            <div class="itinerary-time">T-minus 30 min — Gate Walk</div>
+            <div class="itinerary-title">March from Warm-Up to Gate Staging</div>
+            <div class="itinerary-detail">The ensemble marches in full formation from the warm-up lot to the field entrance gate. Drum majors lead. Silence protocol observed from this point through exit.</div>
+          </div>
+        </div>
+        <div class="itinerary-item">
+          <div class="itinerary-dot accent">🏆</div>
+          <div class="itinerary-body">
+            <div class="itinerary-time">Performance — Show Time</div>
+            <div class="itinerary-title">Competitive Field Performance</div>
+            <div class="itinerary-detail">9–15 minute competitive program. Chaperones and parents watch from the designated section. No one enters the press box area. Photography from parent section only.</div>
+          </div>
+        </div>
+        <div class="itinerary-item">
+          <div class="itinerary-dot">🍽️</div>
+          <div class="itinerary-body">
+            <div class="itinerary-time">Post-Show — Meal Break</div>
+            <div class="itinerary-title">Team Meal &amp; Rest Period</div>
+            <div class="itinerary-detail">Students change out of uniforms. Meal crew distributes team dinner. Students may watch other bands perform during this time under chaperone supervision.</div>
+          </div>
+        </div>
+        <div class="itinerary-item">
+          <div class="itinerary-dot accent">🎖️</div>
+          <div class="itinerary-body">
+            <div class="itinerary-time">Awards Ceremony</div>
+            <div class="itinerary-title">Full Ensemble Gathers for Awards</div>
+            <div class="itinerary-detail">All students attend awards in uniform. Drum majors accept trophies. Group photo taken immediately following. Social media encouraged — tag @whsbandofficial.</div>
+          </div>
+        </div>
+        <div class="itinerary-item">
+          <div class="itinerary-dot">🏠</div>
+          <div class="itinerary-body">
+            <div class="itinerary-time">Return — Departure for WHS</div>
+            <div class="itinerary-title">Load Up &amp; Return Trip</div>
+            <div class="itinerary-detail">Equipment loaded, buses depart. ETA communicated via Band App. Parents should expect pickup at WHS 30 minutes after bus departure from venue. Students unload equipment upon return.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CALENDAR -->
+  <section id="calendar" style="background: var(--card); border-top: 1px solid var(--border);">
+    <div class="section-inner">
+      <div class="section-label">Schedule</div>
+      <h2 class="section-title">2025–26 Calendar</h2>
+      <p class="section-body">All rehearsals, competitions, concerts, and game performances for the full year. Subscribe via Band App for real-time updates.</p>
+
+      <div class="cal-wrap">
+        <div class="cal-card">
+          <div class="cal-header">
+            <div class="cal-month">October 2025</div>
+            <div class="cal-nav">
+              <button>‹</button>
+              <button>›</button>
+            </div>
+          </div>
+          <div class="cal-grid-wrap">
+            <div class="cal-days-header">
+              <div class="cal-day-label">Su</div>
+              <div class="cal-day-label">Mo</div>
+              <div class="cal-day-label">Tu</div>
+              <div class="cal-day-label">We</div>
+              <div class="cal-day-label">Th</div>
+              <div class="cal-day-label">Fr</div>
+              <div class="cal-day-label">Sa</div>
+            </div>
+            <div class="cal-days-grid">
+              <!-- Week 1 padding -->
+              <div class="cal-day other-month">28</div>
+              <div class="cal-day other-month">29</div>
+              <div class="cal-day other-month">30</div>
+              <div class="cal-day">1</div>
+              <div class="cal-day has-event">2</div>
+              <div class="cal-day has-event">3</div>
+              <div class="cal-day has-event">4</div>
+              <!-- Week 2 -->
+              <div class="cal-day">5</div>
+              <div class="cal-day has-event">6</div>
+              <div class="cal-day">7</div>
+              <div class="cal-day has-event">8</div>
+              <div class="cal-day has-event">9</div>
+              <div class="cal-day has-event">10</div>
+              <div class="cal-day has-event">11</div>
+              <!-- Week 3 -->
+              <div class="cal-day">12</div>
+              <div class="cal-day has-event">13</div>
+              <div class="cal-day">14</div>
+              <div class="cal-day has-event">15</div>
+              <div class="cal-day">16</div>
+              <div class="cal-day has-event">17</div>
+              <div class="cal-day today">18</div>
+              <!-- Week 4 -->
+              <div class="cal-day">19</div>
+              <div class="cal-day has-event">20</div>
+              <div class="cal-day">21</div>
+              <div class="cal-day has-event">22</div>
+              <div class="cal-day has-event">23</div>
+              <div class="cal-day has-event">24</div>
+              <div class="cal-day has-event">25</div>
+              <!-- Week 5 -->
+              <div class="cal-day">26</div>
+              <div class="cal-day has-event">27</div>
+              <div class="cal-day">28</div>
+              <div class="cal-day">29</div>
+              <div class="cal-day">30</div>
+              <div class="cal-day has-event">31</div>
+              <div class="cal-day other-month">1</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="event-list-card">
+          <div class="event-list-header">Upcoming Events</div>
+          <div class="event-list">
+            <div class="event-item">
+              <div class="event-date-badge"><div class="month">Oct</div><div class="day">11</div></div>
+              <div class="event-info">
+                <div class="event-name">Saturday Full Ensemble Rehearsal</div>
+                <div class="event-meta">8:00 AM – 4:00 PM · WHS Practice Field</div>
+                <span class="event-type type-rehearsal">Rehearsal</span>
+              </div>
+            </div>
+            <div class="event-item">
+              <div class="event-date-badge"><div class="month">Oct</div><div class="day">17</div></div>
+              <div class="event-info">
+                <div class="event-name">Homecoming Football Game</div>
+                <div class="event-meta">Call 5:30 PM · WHS Stadium · Kickoff 7:00 PM</div>
+                <span class="event-type type-game">Game</span>
+              </div>
+            </div>
+            <div class="event-item">
+              <div class="event-date-badge"><div class="month">Oct</div><div class="day">18</div></div>
+              <div class="event-info">
+                <div class="event-name">🏆 State Marching Championships</div>
+                <div class="event-meta">Call 6:00 AM · Springfield Stadium · Perf. ~2:00 PM</div>
+                <span class="event-type type-comp">Competition</span>
+              </div>
+            </div>
+            <div class="event-item">
+              <div class="event-date-badge"><div class="month">Oct</div><div class="day">24</div></div>
+              <div class="event-info">
+                <div class="event-name">Booster Club Monthly Meeting</div>
+                <div class="event-meta">7:00 PM · Band Room (Rm 112)</div>
+                <span class="event-type type-rehearsal">Meeting</span>
+              </div>
+            </div>
+            <div class="event-item">
+              <div class="event-date-badge"><div class="month">Oct</div><div class="day">25</div></div>
+              <div class="event-info">
+                <div class="event-name">Mid-Atlantic Open Championship</div>
+                <div class="event-meta">Call 7:00 AM · TBA Venue</div>
+                <span class="event-type type-comp">Competition</span>
+              </div>
+            </div>
+            <div class="event-item">
+              <div class="event-date-badge"><div class="month">Oct</div><div class="day">31</div></div>
+              <div class="event-info">
+                <div class="event-name">Halloween Football Game Halftime</div>
+                <div class="event-meta">Call 5:00 PM · WHS Stadium</div>
+                <span class="event-type type-game">Game</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="nav-brand-icon">WHS</div>
+            <span style="font-family:var(--font-heading);font-weight:700;font-size:16px;">Washington Huskies</span>
+          </div>
+          <p>Building musicians, leaders, and community since 1891.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Pages</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="finances.html">Finances</a></li>
+            <li><a href="media.html">Media</a></li>
+            <li><a href="logistics.html">Logistics</a></li>
+            <li><a href="support-materials.html">Support</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Logistics</h4>
+          <ul>
+            <li><a href="#volunteer">Volunteer Roles</a></li>
+            <li><a href="#chaperones">Chaperone Guide</a></li>
+            <li><a href="#itinerary">Event Itinerary</a></li>
+            <li><a href="#calendar">2025–26 Calendar</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Connect</h4>
+          <ul>
+            <li><a href="mailto:j.holloway@washingtonhigh.edu">Email Director</a></li>
+            <li><a href="mailto:boosters@washingtonhigh.edu">Email Boosters</a></li>
+            <li><a href="#">Band App</a></li>
+            <li><a href="#">Facebook Group</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Washington High School Band Booster Club. All rights reserved.</span>
+        <span>Site maintained by the <a href="#">WHS Band Booster Club</a></span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Support Materials — Washington High School Band</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #ffffff;
+      --card: #f9fafb;
+      --accent: #f97316;
+      --accent-dim: rgba(249,115,22,0.1);
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: rgba(15, 23, 42, 0.08);
+      --nav-h: 68px;
+      --font-heading: "Times New Roman", Times, Baskerville, Georgia, serif;
+      --font-body: "Times New Roman", Times, Georgia, serif;
+    }
+    html { scroll-behavior: smooth; }
+
+    h1, h2, h3, .hero-title, .logo {
+      font-family: var(--font-heading);
+      font-weight: 800;
+    }
+    body { font-family: var(--font-body); background-color: var(--bg); color: var(--text); font-size: 16px; line-height: 1.6; overflow-x: hidden; }
+
+    nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); background: rgba(10,10,12,0.72); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; justify-content: space-between; padding: 0 5%; }
+    .nav-brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .nav-brand-icon { width: 38px; height: 38px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: var(--font-heading); font-weight: 800; font-size: 16px; color: #fff; flex-shrink: 0; }
+    .nav-brand-text { font-family: var(--font-heading); font-weight: 700; font-size: 15px; color: var(--text); line-height: 1.2; }
+    .nav-brand-text span { display: block; font-size: 11px; font-weight: 400; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+    .nav-links { display: flex; align-items: center; gap: 4px; list-style: none; }
+    .nav-links a { display: block; padding: 6px 14px; font-family: var(--font-body); font-size: 14px; font-weight: 500; color: var(--muted); text-decoration: none; border-radius: 6px; transition: color 0.2s, background 0.2s; }
+    .nav-links a:hover { color: var(--text); background: rgba(255,255,255,0.06); }
+    .nav-links a.active { color: var(--accent); }
+
+    .page-header { padding-top: calc(var(--nav-h) + 80px); padding-bottom: 80px; padding-left: 5%; padding-right: 5%; background: var(--card); border-bottom: 1px solid var(--border); position: relative; overflow: hidden; }
+    .page-header::before { content: ''; position: absolute; top: -100px; right: -100px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(249,115,22,0.08) 0%, transparent 70%); pointer-events: none; }
+    .page-header-inner { max-width: 1280px; margin: 0 auto; }
+    .page-breadcrumb { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+    .page-breadcrumb a { color: var(--muted); text-decoration: none; }
+    .page-title { font-family: var(--font-heading); font-size: clamp(36px, 5vw, 60px); font-weight: 800; letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 16px; }
+    .page-subtitle { font-size: 18px; color: var(--muted); max-width: 560px; line-height: 1.65; }
+
+    section { padding: 88px 5%; }
+    .section-inner { max-width: 1280px; margin: 0 auto; }
+    .section-label { font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+    .section-title { font-family: var(--font-heading); font-size: clamp(26px, 3.5vw, 38px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; color: var(--text); margin-bottom: 14px; }
+    .section-body { font-size: 16px; color: var(--muted); max-width: 640px; line-height: 1.75; }
+
+    /* SHEET MUSIC */
+    .drive-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 44px; }
+    .drive-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      text-decoration: none;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .drive-card:hover { border-color: rgba(249,115,22,0.35); transform: translateY(-2px); }
+    .drive-card-left { display: flex; align-items: center; gap: 20px; }
+    .drive-icon { width: 52px; height: 52px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 26px; flex-shrink: 0; }
+    .drive-icon-wood { background: rgba(251,191,36,0.12); }
+    .drive-icon-brass { background: rgba(249,115,22,0.12); }
+    .drive-icon-perc { background: rgba(96,165,250,0.12); }
+    .drive-icon-guard { background: rgba(167,139,250,0.12); }
+    .drive-name { font-family: var(--font-heading); font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .drive-desc { font-size: 13px; color: var(--muted); }
+    .drive-btn { display: inline-flex; align-items: center; gap: 6px; background: var(--accent-dim); color: var(--accent); font-family: var(--font-body); font-size: 13px; font-weight: 600; padding: 9px 18px; border-radius: 8px; border: 1px solid rgba(249,115,22,0.3); white-space: nowrap; flex-shrink: 0; transition: background 0.2s; }
+    .drive-card:hover .drive-btn { background: rgba(249,115,22,0.22); }
+
+    .drive-note { margin-top: 24px; background: var(--card); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 18px 22px; font-size: 14px; color: var(--muted); line-height: 1.65; }
+
+    /* EXPECTATIONS */
+    .expectations-section { background: var(--card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .exp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 48px; }
+    .exp-col h3 { font-family: var(--font-heading); font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 20px; }
+    .checklist { display: flex; flex-direction: column; gap: 12px; }
+    .check-item { display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; transition: border-color 0.2s; }
+    .check-item:hover { border-color: rgba(249,115,22,0.25); }
+    .check-box { width: 20px; height: 20px; border-radius: 5px; background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.35); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; font-size: 11px; color: #4ade80; }
+    .check-text { font-size: 14px; color: var(--muted); line-height: 1.55; }
+    .check-text strong { color: var(--text); display: block; margin-bottom: 2px; font-size: 14px; }
+
+    /* ACCORDION FAQ */
+    .faq-section { }
+    .faq-list { margin-top: 48px; display: flex; flex-direction: column; gap: 8px; }
+    .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: border-color 0.2s; }
+    .faq-item.open { border-color: rgba(249,115,22,0.3); }
+    .faq-question {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .faq-question-text { font-family: var(--font-heading); font-size: 16px; font-weight: 600; color: var(--text); }
+    .faq-chevron { width: 28px; height: 28px; border-radius: 6px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform 0.25s, background 0.2s; font-size: 12px; color: var(--muted); }
+    .faq-item.open .faq-chevron { transform: rotate(180deg); background: var(--accent-dim); border-color: rgba(249,115,22,0.3); color: var(--accent); }
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.32s ease, padding 0.25s; }
+    .faq-item.open .faq-answer { max-height: 500px; }
+    .faq-answer-inner { padding: 0 24px 22px; font-size: 15px; color: var(--muted); line-height: 1.75; }
+    .faq-answer-inner a { color: var(--accent); text-decoration: none; }
+    .faq-answer-inner a:hover { text-decoration: underline; }
+
+    /* INSTRUMENT & UNIFORM CARE */
+    .care-section { background: var(--card); border-top: 1px solid var(--border); }
+    .care-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-top: 48px; }
+    .care-card { background: var(--bg); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; transition: border-color 0.2s, transform 0.2s; }
+    .care-card:hover { border-color: rgba(249,115,22,0.3); transform: translateY(-2px); }
+    .care-video-thumb { position: relative; aspect-ratio: 16/9; overflow: hidden; }
+    .care-video-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s; }
+    .care-card:hover .care-video-thumb img { transform: scale(1.04); }
+    .care-play-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.35); display: flex; align-items: center; justify-content: center; }
+    .care-play-btn { width: 56px; height: 56px; background: rgba(249,115,22,0.88); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(249,115,22,0.35); transition: transform 0.2s; }
+    .care-card:hover .care-play-btn { transform: scale(1.1); }
+    .care-play-btn::after { content: ''; width: 0; height: 0; border-top: 9px solid transparent; border-bottom: 9px solid transparent; border-left: 15px solid #fff; margin-left: 3px; }
+    .care-label { position: absolute; top: 10px; left: 10px; background: rgba(10,10,12,0.8); color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 10px; border-radius: 4px; }
+    .care-duration { position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.75); color: #fff; font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 4px; }
+    .care-info { padding: 20px; }
+    .care-title { font-family: var(--font-heading); font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .care-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+    /* FOOTER */
+    footer { background: var(--card); border-top: 1px solid var(--border); padding: 60px 5% 36px; }
+    .footer-inner { max-width: 1280px; margin: 0 auto; }
+    .footer-top { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+    .footer-brand p { font-size: 14px; color: var(--muted); line-height: 1.65; margin-top: 14px; max-width: 260px; }
+    .footer-col h4 { font-family: var(--font-heading); font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text); margin-bottom: 16px; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-col ul a { font-size: 14px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .footer-col ul a:hover { color: var(--text); }
+    .footer-bottom { border-top: 1px solid var(--border); padding-top: 28px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--muted); flex-wrap: wrap; gap: 12px; }
+    .footer-bottom a { color: var(--muted); text-decoration: none; }
+    .footer-bottom a:hover { color: var(--accent); }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-brand">
+      <div class="nav-brand-icon">WHS</div>
+      <div class="nav-brand-text">Washington Huskies <span>Marching Band</span></div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="finances.html">Finances</a></li>
+      <li><a href="media.html">Media</a></li>
+      <li><a href="logistics.html">Logistics</a></li>
+      <li><a href="support-materials.html" class="active">Support</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-header">
+    <div class="page-header-inner">
+      <div class="page-breadcrumb"><a href="index.html">Home</a> / Support Materials</div>
+      <h1 class="page-title">Support<br/>Materials</h1>
+      <p class="page-subtitle">Sheet music, student expectations, instrument care guides, and answers to the questions we hear most.</p>
+    </div>
+  </div>
+
+  <!-- SHEET MUSIC -->
+  <section id="sheet-music">
+    <div class="section-inner">
+      <div class="section-label">Digital Library</div>
+      <h2 class="section-title">Sheet Music Folders</h2>
+      <p class="section-body">Access your section's music via Google Drive. Folders are organized by ensemble and updated at the start of each rehearsal block. Log in with your school Google account.</p>
+
+      <div class="drive-grid">
+        <a href="https://drive.google.com" target="_blank" class="drive-card">
+          <div class="drive-card-left">
+            <div class="drive-icon drive-icon-wood">🎵</div>
+            <div>
+              <div class="drive-name">Woodwinds</div>
+              <div class="drive-desc">Flute · Clarinet · Saxophone · Oboe</div>
+            </div>
+          </div>
+          <div class="drive-btn">Open Drive ↗</div>
+        </a>
+        <a href="https://drive.google.com" target="_blank" class="drive-card">
+          <div class="drive-card-left">
+            <div class="drive-icon drive-icon-brass">🎺</div>
+            <div>
+              <div class="drive-name">Brass</div>
+              <div class="drive-desc">Trumpet · Trombone · Mellophone · Tuba</div>
+            </div>
+          </div>
+          <div class="drive-btn">Open Drive ↗</div>
+        </a>
+        <a href="https://drive.google.com" target="_blank" class="drive-card">
+          <div class="drive-card-left">
+            <div class="drive-icon drive-icon-perc">🥁</div>
+            <div>
+              <div class="drive-name">Percussion</div>
+              <div class="drive-desc">Battery · Front Ensemble · Pit</div>
+            </div>
+          </div>
+          <div class="drive-btn">Open Drive ↗</div>
+        </a>
+        <a href="https://drive.google.com" target="_blank" class="drive-card">
+          <div class="drive-card-left">
+            <div class="drive-icon drive-icon-guard">🎗️</div>
+            <div>
+              <div class="drive-name">Color Guard</div>
+              <div class="drive-desc">Flag choreography · Rifle drill · Sabre charts</div>
+            </div>
+          </div>
+          <div class="drive-btn">Open Drive ↗</div>
+        </a>
+      </div>
+
+      <div class="drive-note">
+        🔒 <strong style="color:var(--text);">Access Note:</strong> Sheet music folders are restricted to enrolled WHS Band members. Log in with your <strong style="color:var(--text);">@fusdk12.net</strong> Google account. If you cannot access a folder, email <a href="mailto:j.holloway@washingtonhigh.edu" style="color:var(--accent);">Dr. Edwards</a> for permission. Do not share folder links externally — all music is licensed for WHS use only.
+      </div>
+    </div>
+  </section>
+
+  <!-- MEMBER EXPECTATIONS -->
+  <section class="expectations-section" id="expectations">
+    <div class="section-inner">
+      <div class="section-label">Standards</div>
+      <h2 class="section-title">Band Member Expectations</h2>
+      <p class="section-body">Membership in the Washington Huskies Band is a privilege that carries real responsibilities. Every member agrees to uphold these standards when they join.</p>
+
+      <div class="exp-grid">
+        <div class="exp-col">
+          <h3>🎯 Preparation &amp; Performance</h3>
+          <div class="checklist">
+            <div class="check-item">
+              <div class="check-box">✓</div>
+              <div class="check-text"><strong>Know your music before rehearsal</strong>Members are expected to practice their individual parts at home. Group rehearsal is for ensemble work, not learning notes.</div>
+            </div>
+            <div class="check-item">
+              <div class="check-box">✓</div>
+              <div class="check-text"><strong>Arrive 10 minutes early</strong>Call time means ready to play — not walking in the door. Set up your instrument, warm up individually, and be in formation before the director takes the podium.</div>
+            </div>
+            <div class="check-item">
+              <div class="check-box">✓</div>
+              <div class="check-text"><strong>Memorize all music by specified dates</strong>Marching season requires all music memorized before the first competition. Concert season has page deadlines communicated in the Band App.</div>
+            </div>
+            <div class="check-item">
+              <div class="check-box">✓</div>
+              <div class="check-text"><strong>Maintain your instrument</strong>Daily swabbing, weekly key oiling, and quarterly cork inspections. Equipment failures due to neglect are the student's responsibility to address before next rehearsal.</div>
+            </div>
+            <div class="check-item">
+              <div class="check-box">✓</div>
+              <div class="check-text"><strong>Wear full, correct uniform</strong>Any missing uniform component at a performance is a deduction. No jewelry, unsanctioned footwear, or alterations to the issued uniform.</div>
+            </div>
+          </div>
+        </div>
+        <div class="exp-col">
+          <h3>🤝 Conduct &amp; Community</h3>
+          <div class="checklist">
+            <div class="check-item">
+              <div class="check-box">✓</div>
+              <div class="check-text"><strong>Treat all members and staff with respect</strong>Section leaders have authority in the director's absence. Disagreements are resolved privately — never during rehearsal, on the field, or in uniform at events.</div>
+            </div>
+            <div class="check-item">
+              <div class="check-box">✓</div>
+              <div class="check-text"><strong>No phones during rehearsal</strong>Phones are stored in phone pockets during rehearsals. Any call or text during warm-up is a privilege violation. If you don't own a phone, talk to Dr Edwards about what to do next.</div>
+            </div>
+            <div class="check-item">
+              <div class="check-box">✓</div>
+              <div class="check-text"><strong>Mandatory attendance policy</strong>Unexcused absences the week before competitions result in a being unable to compete. You may be excused from a maximum of two absences from competitions before incurring additional work to make up for your absence.</div>
+            </div>
+            <div class="check-item">
+              <div class="check-box">✓</div>
+              <div class="check-text"><strong>Zero tolerance for substance use</strong>Any student found in possession of or under the influence of substances at any band event is subject to immediate removal and school code of conduct proceedings.</div>
+            </div>
+            <div class="check-item">
+              <div class="check-box">✓</div>
+              <div class="check-text"><strong>Represent the program honorably</strong>In uniform, you are representing the entire Washington High School band. Behavior at competitions, travel, and community events reflects on the entire band. Act accordingly.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="section-inner">
+      <div class="section-label">Common Questions</div>
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <p class="section-body">Answers to the questions parents and new students ask most. Don't see yours? Email Dr. Edwards directly.</p>
+
+      <div class="faq-list">
+
+        <div class="faq-item open">
+          <div class="faq-question">
+            <div class="faq-question-text">What are the program fees for the 2025–26 school year?</div>
+            <div class="faq-chevron">▾</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              The annual band participation fee is <strong style="color:var(--text);">$250 per student</strong>, due in full or in two seperate installments by September 1st. This covers competition entry fees, transportation, and uniform costs. It does not cover the cost of marching shoes or personal instrument supplies. Financial hardship accommodations are available — contact <a href="mailto:dedwards@fusdk12.net">Dr.Edwards</a> confidentially.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <div class="faq-question-text">Does the school provide instruments, or does my student need to bring their own?</div>
+            <div class="faq-chevron">▾</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Washington High School maintains a full instrument lending library for students who cannot provide their own. School instruments are available on a first-come, first-served basis each August. A $50 annual maintenance deposit is required for borrowed instruments, fully refundable upon return in good condition. Students who own their own instrument are encouraged to use it, though school instruments may be used for marching to protect personal property.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <div class="faq-question-text">How do I know about schedule changes and last-minute event updates?</div>
+            <div class="faq-chevron">▾</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              All schedule changes, weather cancellations, and event-day updates are communicated via <strong style="color:var(--text);">StudentSquare</strong>. Students and parents can also download the Remind app with notifications enabled for communication on competition day. Download it from the App Store or Google Play.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <div class="faq-question-text">Can my student join band mid-year, or is it September only?</div>
+            <div class="faq-chevron">▾</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Mid-year enrollment is possible for the Concert Band and Jazz Ensemble, but marching band requires a full-season commitment starting in August pre-season. Students transferring in from other schools with marching experience may audition for the marching ensemble at the director's discretion. Contact Dr. Edwards to discuss your student's background and options.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <div class="faq-question-text">What happens if my student misses a competition?</div>
+            <div class="faq-chevron">▾</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Competition absences are taken very seriously, as they affect the entire ensemble's performance and score. If a student must miss a competition due to illness or a family emergency, the director must be notified at least <strong style="color:var(--text);">5 days in advance</strong> where possible. Three competition absences in a season will result in removal from the competitive ensemble for that year. There is no fee refund for missed competitions.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <div class="faq-question-text">Are parents allowed to watch rehearsals?</div>
+            <div class="faq-chevron">▾</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Indoor rehearsals in the band room are generally closed to parents to minimize distraction. Outdoor full-ensemble rehearsals (held on the practice field, usually Saturday mornings) are open for parents to observe from the designated spectator areas. The last Saturday rehearsal before each competition is typically an invited "dress run" — details are announced via Band App.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <div class="faq-question-text">How do I volunteer to be a chaperone for away events?</div>
+            <div class="faq-chevron">▾</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              All chaperones must complete a DCPS background check before participating. Once cleared, sign up through the <a href="logistics.html#volunteer">Volunteer page</a> or contact our volunteer coordinator at <a href="mailto:boosters@washingtonhigh.edu">boosters@washingtonhigh.edu</a>. Chaperone slots are limited and filled in the order applications are received. Priority is given to parents of current band members who have completed orientation.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <div class="faq-question-text">My student is interested in drum major. How does that process work?</div>
+            <div class="faq-chevron">▾</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Drum major auditions are held each May for the following fall season. Candidates must have at least one full year of marching experience, demonstrate strong musical knowledge across multiple sections, and pass a conducting and marching clinic evaluated by the director and staff. A leadership interview is also required. Announcements are made in April via Band App with audition packet details.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- INSTRUMENT & UNIFORM CARE -->
+  <section class="care-section" id="care">
+    <div class="section-inner">
+      <div class="section-label">Care Guides</div>
+      <h2 class="section-title">Instrument &amp; Uniform Care</h2>
+      <p class="section-body">Short, practical video guides produced by the WHS Band staff to help students properly maintain their equipment and extend the life of school-issued uniforms.</p>
+
+      <div class="care-grid">
+        <div class="care-card">
+          <div class="care-video-thumb">
+            <img src="https://images.unsplash.com/photo-1559181567-c3190ca9be46?w=800&q=75" alt="Brass care" />
+            <div class="care-play-overlay"><div class="care-play-btn"></div></div>
+            <div class="care-label">Instrument Care</div>
+            <div class="care-duration">4:32</div>
+          </div>
+          <div class="care-info">
+            <div class="care-title">Brass Instrument Cleaning &amp; Valve Care</div>
+            <div class="care-desc">Daily swabbing, monthly slide greasing, valve oiling technique, and how to safely flush a brass instrument without damaging the lacquer.</div>
+          </div>
+        </div>
+
+        <div class="care-card">
+          <div class="care-video-thumb">
+            <img src="https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=800&q=75" alt="Woodwind care" />
+            <div class="care-play-overlay"><div class="care-play-btn"></div></div>
+            <div class="care-label">Instrument Care</div>
+            <div class="care-duration">5:18</div>
+          </div>
+          <div class="care-info">
+            <div class="care-title">Woodwind Reed &amp; Key Maintenance</div>
+            <div class="care-desc">Proper reed soaking and storage, key pad inspection, tone hole cleaning, and how to handle minor pad replacements before they affect tone quality.</div>
+          </div>
+        </div>
+
+        <div class="care-card">
+          <div class="care-video-thumb">
+            <img src="https://images.unsplash.com/photo-1571330735066-03aaa9429d89?w=800&q=75" alt="Drum care" />
+            <div class="care-play-overlay"><div class="care-play-btn"></div></div>
+            <div class="care-label">Instrument Care</div>
+            <div class="care-duration">6:05</div>
+          </div>
+          <div class="care-info">
+            <div class="care-title">Percussion Head Tuning &amp; Drum Care</div>
+            <div class="care-desc">How to evenly tune a snare or tenor drum head, check rim integrity, store mallets and sticks correctly, and inspect marching harnesses for wear.</div>
+          </div>
+        </div>
+
+        <div class="care-card">
+          <div class="care-video-thumb">
+            <img src="https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=800&q=75" alt="Uniform care" />
+            <div class="care-play-overlay"><div class="care-play-btn"></div></div>
+            <div class="care-label">Uniform Care</div>
+            <div class="care-duration">3:45</div>
+          </div>
+          <div class="care-info">
+            <div class="care-title">Marching Uniform Washing &amp; Hanging Guide</div>
+            <div class="care-desc">How to spot-clean a bib and jacket after performances, proper cold-water washing technique for the shell, and correct hanging to prevent fabric creasing between events.</div>
+          </div>
+        </div>
+
+        <div class="care-card">
+          <div class="care-video-thumb">
+            <img src="https://images.unsplash.com/photo-1525201548942-d8732f6617a0?w=800&q=75" alt="Color guard" />
+            <div class="care-play-overlay"><div class="care-play-btn"></div></div>
+            <div class="care-label">Equipment Care</div>
+            <div class="care-duration">4:10</div>
+          </div>
+          <div class="care-info">
+            <div class="care-title">Color Guard Silk &amp; Equipment Storage</div>
+            <div class="care-desc">Cleaning and rolling silk flags without wrinkles, pole inspection for splinters, rifle and sabre grip tape replacement, and pre-show equipment checks.</div>
+          </div>
+        </div>
+
+        <div class="care-card">
+          <div class="care-video-thumb">
+            <img src="https://images.unsplash.com/photo-1598387993213-5c8ef3e92438?w=800&q=75" alt="Shako" />
+            <div class="care-play-overlay"><div class="care-play-btn"></div></div>
+            <div class="care-label">Uniform Care</div>
+            <div class="care-duration">2:58</div>
+          </div>
+          <div class="care-info">
+            <div class="care-title">Shako Hat Maintenance &amp; Plume Care</div>
+            <div class="care-desc">Cleaning the shako shell and visor without dulling the patent finish, correct plume attachment and removal, and safe storage in the provided box to prevent crushing.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="nav-brand-icon">WHS</div>
+            <span style="font-family:var(--font-heading);font-weight:700;font-size:16px;">Washington Huskies</span>
+          </div>
+          <p>Building musicians, leaders, and community since 1891.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Pages</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="finances.html">Finances</a></li>
+            <li><a href="media.html">Media</a></li>
+            <li><a href="logistics.html">Logistics</a></li>
+            <li><a href="support-materials.html">Support</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#sheet-music">Sheet Music</a></li>
+            <li><a href="#expectations">Expectations</a></li>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#care">Care Guides</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Connect</h4>
+          <ul>
+            <li><a href="mailto:j.holloway@washingtonhigh.edu">Email Director</a></li>
+            <li><a href="mailto:boosters@washingtonhigh.edu">Email Boosters</a></li>
+            <li><a href="#">Band App</a></li>
+            <li><a href="#">YouTube Channel</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Washington High School Band Booster Club. All rights reserved.</span>
+        <span>Site maintained by the <a href="#">WHS Band Booster Club</a></span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // FAQ Accordion
+    document.querySelectorAll('.faq-question').forEach(q => {
+      q.addEventListener('click', () => {
+        const item = q.closest('.faq-item');
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+        if (!isOpen) item.classList.add('open');
+      });
+    });
+  </script>
+</body>
+</html>
